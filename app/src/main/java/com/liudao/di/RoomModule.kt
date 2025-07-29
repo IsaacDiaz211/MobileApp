@@ -21,7 +21,9 @@ object RoomModule {
             context,
             LiuDaoDatabase::class.java,
             "liudao_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
 
     @Provides
     fun provideExerciseDao(db: LiuDaoDatabase) = db.exerciseDao()
@@ -34,6 +36,9 @@ object RoomModule {
 
     @Provides
     fun provideSetDao(db: LiuDaoDatabase) = db.setDao()
+
+    @Provides
+    fun provideCardioSetDao(db: LiuDaoDatabase) = db.cardioSetDao()
 
     @Provides
     fun provideSupplementDao(db: LiuDaoDatabase) = db.supplementDao()

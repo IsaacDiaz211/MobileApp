@@ -17,4 +17,8 @@ interface RoutineDao {
 
     @Delete
     suspend fun delete(routine: RoutineEntity)
+    //TODO: completar la query para que obtenga los sets de SetEntity y de CardioSetEntity
+    @Query("SELECT * FROM routines WHERE id = :id")
+    fun getSetsByRoutine(id: Long): Flow<RoutineEntity>
+
 }

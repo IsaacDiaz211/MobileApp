@@ -8,5 +8,6 @@ import java.time.LocalDate
 data class SupplementEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    val start: LocalDate
+    val start: LocalDate,
+    val end: LocalDate? = null
 )

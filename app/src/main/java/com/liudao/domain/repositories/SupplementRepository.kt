@@ -22,5 +22,5 @@ class SupplementRepository @Inject constructor(
 }
 
 //Mappers
-fun SupplementEntity.toDomain() = Supplement(id, name, start)
-fun Supplement.toEntity() = SupplementEntity(id, name, start)
+fun SupplementEntity.toDomain() = Supplement(id, name, start, end)
+fun Supplement.toEntity() = SupplementEntity(id, name, start, end)

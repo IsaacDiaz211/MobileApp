@@ -30,7 +30,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FluentStyledApp()
-
         }
     }
 }

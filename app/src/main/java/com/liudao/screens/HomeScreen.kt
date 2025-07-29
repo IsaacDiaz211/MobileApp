@@ -18,7 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.util.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import com.liudao.domain.models.Exercise
 
@@ -30,39 +32,61 @@ fun HomeScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { TopBar(date = state.today) }
+        topBar = { TopBar(date = state.today) } ,
+        containerColor = Color.Transparent
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            // 1) Buscador
-            SearchRow(
-                text = state.searchText,
-                onTextChange = vm::onSearchChange,
-                onAddClick = { /* abre diálogo crear ejercicio */ }
-            )
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 80.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // 2) Lista desplegable de coincidencias
+                if (state.searchResults.isNotEmpty()) {
+                    ExerciseSuggestions(
+                        list = state.searchResults,
+                        onSelect = { ex ->
+                            vm.selectExercise(ex)
+                            // Mostrar inmediatamente los inputs para ese ejercicio
+                        }
+                    )
+                }
 
-            // 2) Lista desplegable de coincidencias
-            if (state.searchResults.isNotEmpty()) {
-                ExerciseSuggestions(
-                    list = state.searchResults,
-                    onSelect = { ex ->
-                        vm.selectExercise(ex)
-                        // Mostrar inmediatamente los inputs para ese ejercicio
-                    }
+                // 3) Sets actuales (agrupados por ejercicio)
+                SetsList(
+                    sets = state.currentSets,
+                    onAddSameWeight = { idx -> /* igual peso */ },
+                    onAddDifferentWeight = { idx -> /* nuevo peso */ }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .clip(RoundedCornerShape(40.dp))
+                    .background(Color.Transparent)
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                // 1) Buscador
+                SearchRow(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 16.dp)
+                        .padding(horizontal = 16.dp),
+                    text = state.searchText,
+                    onTextChange = vm::onSearchChange,
+                    onAddClick = { /* acción para crear ejercicio */ }
                 )
             }
 
-            // 3) Sets actuales (agrupados por ejercicio)
-            SetsList(
-                sets = state.currentSets,
-                onAddSameWeight = { idx -> /* igual peso */ },
-                onAddDifferentWeight = { idx -> /* nuevo peso */ }
-            )
+
         }
     }
 }
@@ -85,14 +109,13 @@ fun TopBar(date: String) {
 
 @Composable
 fun SearchRow(
+    modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
     onAddClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier = Modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
@@ -105,7 +128,8 @@ fun SearchRow(
         Spacer(Modifier.width(8.dp))
         FloatingActionButton(
             onClick = onAddClick,
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
         ) {
             Icon(Icons.Default.Add, contentDescription = "Nuevo")
         }

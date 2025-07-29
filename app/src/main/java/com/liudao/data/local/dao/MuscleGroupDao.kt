@@ -17,4 +17,8 @@ interface MuscleGroupDao {
 
     @Delete
     suspend fun delete(muscleGroup: MuscleGroupEntity)
+
+    @Query("SELECT COUNT(*) FROM muscle_groups")
+    suspend fun count(): Int
+
 }

@@ -10,10 +10,12 @@ import com.liudao.domain.interfaces.IMuscleGroupRepository
 import com.liudao.domain.interfaces.IRoutineRepository
 import com.liudao.domain.interfaces.ISetRepository
 import com.liudao.domain.interfaces.ISupplementRepository
+import com.liudao.domain.interfaces.ICardioSetRepository
 import com.liudao.domain.repositories.MuscleGroupRepository
 import com.liudao.domain.repositories.RoutineRepository
 import com.liudao.domain.repositories.SetRepository
 import com.liudao.domain.repositories.SupplementRepository
+import com.liudao.domain.repositories.CardioSetRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,6 +40,11 @@ abstract class RepositoryModule {
     abstract fun bindSetRepository(
         setRepoImpl: SetRepository
     ): ISetRepository
+
+    @Binds
+    abstract fun bindCardioSetRepository(
+        cardioRepoImpl: CardioSetRepository
+    ): ICardioSetRepository
 
     @Binds
     abstract fun bindSupplementRepository(
