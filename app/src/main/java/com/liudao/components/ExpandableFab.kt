@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -49,6 +50,7 @@ fun ExpandableFab(
             FloatingActionButton(
                 onClick = onNewExerciseClick,
                 modifier = Modifier.alpha(alpha),
+                shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(Icons.Default.FitnessCenter, contentDescription = "Nuevo Ejercicio")
@@ -57,6 +59,7 @@ fun ExpandableFab(
             FloatingActionButton(
                 onClick = onNewSupplementClick,
                 modifier = Modifier.alpha(alpha),
+                shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(Icons.Default.LocalDrink, contentDescription = "Nuevo Suplemento")
@@ -65,6 +68,7 @@ fun ExpandableFab(
 
         FloatingActionButton(
             onClick = onFabClick,
+            shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary
         ) {
             Icon(

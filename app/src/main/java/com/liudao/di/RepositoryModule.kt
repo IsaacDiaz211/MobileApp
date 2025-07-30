@@ -11,11 +11,13 @@ import com.liudao.domain.interfaces.IRoutineRepository
 import com.liudao.domain.interfaces.ISetRepository
 import com.liudao.domain.interfaces.ISupplementRepository
 import com.liudao.domain.interfaces.ICardioSetRepository
+import com.liudao.domain.interfaces.IPeriodRepository
 import com.liudao.domain.repositories.MuscleGroupRepository
 import com.liudao.domain.repositories.RoutineRepository
 import com.liudao.domain.repositories.SetRepository
 import com.liudao.domain.repositories.SupplementRepository
 import com.liudao.domain.repositories.CardioSetRepository
+import com.liudao.domain.repositories.PeriodRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

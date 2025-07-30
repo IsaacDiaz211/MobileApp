@@ -22,6 +22,9 @@ class PeriodRepository @Inject constructor(
 
     override fun getPeriodsBySupp(supplement: Long): Flow<List<Period>> =
         dao.getPeriodsBySupp(supplement).map { list -> list.map { it.toDomain() } }
+
+    override suspend fun update(period: Period) =
+        dao.update(period.toEntity())
 }
 
 //Mappers

@@ -8,4 +8,5 @@ interface IPeriodRepository {
     suspend fun insert(period: Period): Long
     suspend fun delete(period: Period)
     fun getPeriodsBySupp(supplement: Long): Flow<List<Period>>
+    suspend fun update(period: Period)
 }

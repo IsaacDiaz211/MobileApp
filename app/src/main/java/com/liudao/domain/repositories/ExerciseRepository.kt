@@ -23,6 +23,9 @@ class ExerciseRepository @Inject constructor(
     override suspend fun search(text: String): Flow<List<Exercise>> =
         dao.search(text).map { list -> list.map { it.toDomain() } }
 
+    override suspend fun update(exercise: Exercise) {
+        dao.update(exercise.toEntity())
+    }
 }
 
 //Mappers

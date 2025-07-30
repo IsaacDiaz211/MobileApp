@@ -8,4 +8,6 @@ interface IExerciseRepository {
     suspend fun insert(exercise: Exercise): Long
     suspend fun delete(exercise: Exercise)
     suspend fun search(text: String): Flow<List<Exercise>>
+    suspend fun update(exercise: Exercise)
+
 }

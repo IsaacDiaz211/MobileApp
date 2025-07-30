@@ -19,8 +19,11 @@ class SupplementRepository @Inject constructor(
 
     override suspend fun delete(sup: Supplement) =
         dao.delete(sup.toEntity())
+
+    override suspend fun update(sup: Supplement) =
+        dao.update(sup.toEntity())
 }
 
 //Mappers
-fun SupplementEntity.toDomain() = Supplement(id, name, start, end)
-fun Supplement.toEntity() = SupplementEntity(id, name, start, end)
+fun SupplementEntity.toDomain() = Supplement(id, name)
+fun Supplement.toEntity() = SupplementEntity(id, name)

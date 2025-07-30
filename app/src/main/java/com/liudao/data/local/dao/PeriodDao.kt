@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.liudao.data.local.entities.*
 import kotlinx.coroutines.flow.Flow
 
@@ -23,4 +24,8 @@ interface PeriodDao {
 
     @Delete
     suspend fun delete(period: PeriodEntity)
+
+    @Update
+    suspend fun update(period: PeriodEntity)
+
 }

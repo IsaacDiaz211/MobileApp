@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.liudao.data.local.entities.*
 import kotlinx.coroutines.flow.Flow
 
@@ -23,4 +24,7 @@ interface ExerciseDao {
 
     @Query("SELECT * FROM exercises WHERE name LIKE '%' || :text || '%'")
     fun search(text: String): Flow<List<ExerciseEntity>>
+
+    @Update
+    suspend fun update(exercise: ExerciseEntity)
 }

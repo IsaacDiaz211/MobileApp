@@ -4,7 +4,5 @@ import java.time.LocalDate
 
 data class Supplement(
     val id: Long = 0,
-    val name: String,
-    val start: LocalDate,
-    val end: LocalDate? = null
+    val name: String
 )
