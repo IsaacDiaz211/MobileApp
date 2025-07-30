@@ -50,4 +50,9 @@ abstract class RepositoryModule {
     abstract fun bindSupplementRepository(
         supRepoImpl: SupplementRepository
     ): ISupplementRepository
+
+    @Binds
+    abstract fun bindPeriodRepository(
+        periodRepoImpl: PeriodRepository
+    ): IPeriodRepository
 }

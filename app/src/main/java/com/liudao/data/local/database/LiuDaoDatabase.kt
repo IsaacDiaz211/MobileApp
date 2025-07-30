@@ -13,7 +13,8 @@ import com.liudao.data.local.dao.*
         MuscleGroupEntity::class,
         ExerciseEntity::class,
         SetEntity::class,
-               CardioSetEntity::class],
+        CardioSetEntity::class,
+        PeriodEntity::class],
     version = 3,
     exportSchema = false)
 @TypeConverters(Converters::class)
@@ -24,4 +25,5 @@ abstract class LiuDaoDatabase: RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun setDao(): SetDao
     abstract fun cardioSetDao(): CardioSetDao
+    abstract fun periodDao(): PeriodDao
 }

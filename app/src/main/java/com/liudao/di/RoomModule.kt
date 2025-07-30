@@ -42,4 +42,7 @@ object RoomModule {
 
     @Provides
     fun provideSupplementDao(db: LiuDaoDatabase) = db.supplementDao()
+
+    @Provides
+    fun providePeriodDao(db: LiuDaoDatabase) = db.periodDao()
 }

@@ -7,7 +7,5 @@ import java.time.LocalDate
 @Entity(tableName = "supplements")
 data class SupplementEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val name: String,
-    val start: LocalDate,
-    val end: LocalDate? = null
+    val name: String
 )
