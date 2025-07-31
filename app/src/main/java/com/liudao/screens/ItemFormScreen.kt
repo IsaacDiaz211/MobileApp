@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun CUItemsScreen(
-    vm: CUItemsViewModel = hiltViewModel(),
+fun ItemFormScreen(
+    vm: ItemFormViewModel = hiltViewModel(),
     tipo: String,
     itemId: Long?
 ){}

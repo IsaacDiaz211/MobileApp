@@ -5,10 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.liudao.components.TabRow
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
@@ -16,7 +13,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -106,8 +102,8 @@ fun AddItemsScreen(
             ExpandableFab(
                 expanded = fabExpanded,
                 onFabClick = { fabExpanded = !fabExpanded },
-                onNewExerciseClick = { nc.navigate("cuItem/Ejercicio") },
-                onNewSupplementClick = { nc.navigate("cuItem/Suplemento") },
+                onNewExerciseClick = { nc.navigate("itemForm/Ejercicio") },
+                onNewSupplementClick = { nc.navigate("itemForm/Suplemento") },
             )
         },
         containerColor = Color.Transparent
@@ -119,12 +115,12 @@ fun AddItemsScreen(
             when (state.selectedTab) {
                 "Ejercicios" -> ExerciseList(
                     exercises = state.exercises,
-                    onEdit = { exercise -> nc.navigate("cudItem/Ejercicio?id=${exercise.id}") },
+                    onEdit = { exercise -> nc.navigate("itemForm/Ejercicio?id=${exercise.id}") },
                     onDelete = vm::onDeleteExercise
                 )
                 "Suplementos" -> SupplementList(
                     supplements = state.supplements,
-                    onEdit = { supplement -> nc.navigate("cudItem/Suplemento?id=${supplement.id}") },
+                    onEdit = { supplement -> nc.navigate("itemForm/Suplemento?id=${supplement.id}") },
                     onDelete = vm::onDeleteSupplement
                 )
             }

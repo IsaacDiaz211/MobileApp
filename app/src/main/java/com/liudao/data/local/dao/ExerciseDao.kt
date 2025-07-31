@@ -27,4 +27,8 @@ interface ExerciseDao {
 
     @Update
     suspend fun update(exercise: ExerciseEntity)
+
+    @Query("SELECT * FROM exercises WHERE id = :id")
+    fun getById(id: Long): ExerciseEntity?
+
 }

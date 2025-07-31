@@ -26,6 +26,9 @@ class ExerciseRepository @Inject constructor(
     override suspend fun update(exercise: Exercise) {
         dao.update(exercise.toEntity())
     }
+    override fun getById(id: Long): Exercise? =
+        dao.getById(id)?.toDomain()
+
 }
 
 //Mappers
