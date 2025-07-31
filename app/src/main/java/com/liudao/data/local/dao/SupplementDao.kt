@@ -21,5 +21,6 @@ interface SupplementDao {
 
     @Update
     suspend fun update(supplement: SupplementEntity)
-
+    @Query("SELECT * FROM supplements WHERE id = :id")
+    suspend fun getById(id: Long): SupplementEntity?
 }

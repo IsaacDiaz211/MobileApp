@@ -4,8 +4,10 @@ import com.liudao.data.local.dao.SupplementDao
 import com.liudao.data.local.entities.SupplementEntity
 import com.liudao.domain.interfaces.ISupplementRepository
 import com.liudao.domain.models.Supplement
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SupplementRepository @Inject constructor(
@@ -22,6 +24,10 @@ class SupplementRepository @Inject constructor(
 
     override suspend fun update(sup: Supplement) =
         dao.update(sup.toEntity())
+
+    override suspend fun getById(id: Long): Supplement? = withContext(Dispatchers.IO) {
+        dao.getById(id)?.toDomain()
+    }
 }
 
 //Mappers

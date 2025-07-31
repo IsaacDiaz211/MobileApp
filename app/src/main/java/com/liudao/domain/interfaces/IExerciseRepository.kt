@@ -9,5 +9,5 @@ interface IExerciseRepository {
     suspend fun delete(exercise: Exercise)
     suspend fun search(text: String): Flow<List<Exercise>>
     suspend fun update(exercise: Exercise)
-    fun getById(id: Long): Exercise?
+    suspend fun getById(id: Long): Exercise?
 }

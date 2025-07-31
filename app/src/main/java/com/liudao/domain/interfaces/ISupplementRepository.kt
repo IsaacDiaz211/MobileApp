@@ -8,5 +8,5 @@ interface ISupplementRepository {
     suspend fun insert(sup: Supplement): Long
     suspend fun delete(sup: Supplement)
     suspend fun update(sup: Supplement)
-
+    suspend fun getById(id: Long): Supplement?
 }

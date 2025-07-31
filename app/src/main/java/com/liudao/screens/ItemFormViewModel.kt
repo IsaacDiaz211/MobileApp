@@ -1,5 +1,6 @@
 package com.liudao.screens
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,9 +8,9 @@ import com.liudao.domain.models.Exercise
 import com.liudao.domain.models.MuscleGroup
 import com.liudao.domain.models.Supplement
 import com.liudao.domain.repositories.ExerciseRepository
-import com.liudao.domain.repositories.MuscleGroupRepository
 import com.liudao.domain.repositories.PeriodRepository
 import com.liudao.domain.repositories.SupplementRepository
+import com.liudao.constants.DefaultMuscleGroups
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ import javax.inject.Inject
 data class ItemFormUiState(
     val name: String = "",
     val selectedGroupId: Long? = null,
-    val muscleGroups: List<MuscleGroup> = emptyList(),
+    val muscleGroups: List<MuscleGroup> = DefaultMuscleGroups,
     val isEdit: Boolean = false,
     val exerciseId: Long? = null
 )
@@ -34,21 +35,15 @@ class ItemFormViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val exerciseRepo: ExerciseRepository,
     private val supplementRepo: SupplementRepository,
-    private val periodRepo: PeriodRepository,
-    private val muscleGroupRepo: MuscleGroupRepository
+    private val periodRepo: PeriodRepository
 ): ViewModel()  {
     private val exerciseId: Long? = savedStateHandle["id"]
     private val _uiState = MutableStateFlow(ItemFormUiState())
     val uiState: StateFlow<ItemFormUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            val groups = muscleGroupRepo.getAll().first()
-            _uiState.update { state ->
-                state.copy(muscleGroups = groups)
-            }
-
-            if (exerciseId != null) {
+        if (exerciseId != null) {
+            viewModelScope.launch {
                 val exercise = exerciseRepo.getById(exerciseId)
                 exercise?.let { ex ->
                     _uiState.update { state ->

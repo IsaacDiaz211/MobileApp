@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -168,9 +169,19 @@ fun ExerciseItem(
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(exercise.name, Modifier.weight(1f))
+        Text(
+            exercise.name,
+            Modifier.weight(1f),
+            color = Color.White)
         IconButton(onClick = { onEdit(exercise) }) {
-            Icon(Icons.Default.Edit, "Editar")
+            Icon(Icons.Default.Edit,
+                "Editar",
+                tint = Color.White)
+        }
+        IconButton(onClick = { onDelete(exercise.id) }) {
+            Icon(Icons.Default.Delete,
+                "Eliminar",
+                tint = Color.White)
         }
     }
 }
@@ -188,9 +199,15 @@ fun SupplementItem(
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(supp.name, Modifier.weight(1f))
+        Text(
+            supp.name,
+            Modifier.weight(1f),
+            color = Color.White)
         IconButton(onClick = { onEdit(supp) }) {
             Icon(Icons.Default.Edit, "Editar")
+        }
+        IconButton(onClick = { onDelete(supp.id) }) {
+            Icon(Icons.Default.Delete, "Eliminar")
         }
     }
 }

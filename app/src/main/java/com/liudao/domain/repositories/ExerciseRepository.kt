@@ -4,8 +4,10 @@ import com.liudao.data.local.dao.ExerciseDao
 import com.liudao.data.local.entities.ExerciseEntity
 import com.liudao.domain.interfaces.IExerciseRepository
 import com.liudao.domain.models.Exercise
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ExerciseRepository @Inject constructor(
@@ -26,8 +28,9 @@ class ExerciseRepository @Inject constructor(
     override suspend fun update(exercise: Exercise) {
         dao.update(exercise.toEntity())
     }
-    override fun getById(id: Long): Exercise? =
+    override suspend fun getById(id: Long): Exercise? = withContext(Dispatchers.IO) {
         dao.getById(id)?.toDomain()
+    }
 
 }
 

@@ -46,7 +46,7 @@ fun NavGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val tipo = backStackEntry.arguments?.getString("tipo") ?: "Ejercicio"
             val id = backStackEntry.arguments?.getLong("id")?.takeIf { it != -1L }
-            ItemFormScreen(tipo = tipo, itemId = id)
+            ItemFormScreen(navController)
         }
     }
 }

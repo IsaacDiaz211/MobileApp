@@ -1,5 +1,6 @@
 package com.liudao.domain.repositories
 
+import android.util.Log
 import com.liudao.data.local.dao.MuscleGroupDao
 import com.liudao.data.local.entities.ExerciseEntity
 import com.liudao.data.local.entities.MuscleGroupEntity
@@ -14,7 +15,8 @@ class MuscleGroupRepository @Inject constructor(
     private val dao: MuscleGroupDao
 ): IMuscleGroupRepository {
     override fun getAll(): Flow<List<MuscleGroup>> =
-        dao.getMuscleGroups().map { list -> list.map { it.toDomain() } }
+        dao.getMuscleGroups().map { list -> list.map { it.toDomain() }
+        }
     override suspend fun insert(group: MuscleGroup): Long =
         dao.insert(group.toEntity())
     override suspend fun delete(group: MuscleGroup) =
