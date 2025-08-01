@@ -83,9 +83,9 @@ class ItemFormViewModel @Inject constructor(
                 exerciseRepo.update(updated)
             } else {
                 val new = Exercise(name = name, muscleGroupId = groupId)
-                exerciseRepo.insert(new)
+                var id = exerciseRepo.insert(new)
+                Log.d("ItemFormViewModel", "onSave: ${new.name}, id:  ${id}")
             }
-
             onFinish()
         }
     }

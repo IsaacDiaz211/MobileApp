@@ -36,4 +36,4 @@ class ExerciseRepository @Inject constructor(
 
 //Mappers
 fun ExerciseEntity.toDomain() = Exercise(id, name, idMuscleGroup)
-fun Exercise.toEntity() = ExerciseEntity(id, name, muscleGroupId)
+fun Exercise.toEntity() = ExerciseEntity(id = this.id ?: 0L, name, muscleGroupId)

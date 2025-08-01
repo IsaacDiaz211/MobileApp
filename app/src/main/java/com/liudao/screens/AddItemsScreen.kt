@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -25,65 +27,6 @@ import com.liudao.domain.models.Exercise
 import com.liudao.domain.models.Supplement
 import com.liudao.components.ExpandableFab
 import com.liudao.components.TopTabSelector
-
-/*@Composable
-fun AddItemsScreen(
-    vm: AddItemsViewModel = hiltViewModel()
-) {
-    val state by vm.uiState.collectAsStateWithLifecycle()
-    var fabExpanded by rememberSaveable { mutableStateOf(false) }
-    Scaffold(
-        topBar = {
-            TopTabSelector(
-                selectedTab = state.selectedTab,
-                onTabSelected = vm::onTabSelected
-            )
-        },
-        containerColor = Color.Transparent
-    ) { padding ->
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-        ) {
-            // 1) Listado
-            when (state.selectedTab) {
-                "Ejercicios"  -> ExerciseList(state.exercises) { vm.onEdit(it) }
-                "Suplementos" -> SupplementList(state.supplements) { vm.onEdit(it) }
-            }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            when (state.selectedTab) {
-                "Ejercicios" -> ExerciseList(state.exercises)
-                "Suplementos" -> SupplementList(state.supplements)
-            }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-            ) {
-                ExpandableFab(
-                    expanded = fabExpanded,
-                    onFabClick = { fabExpanded = !fabExpanded },
-                    onNewExerciseClick = {
-                        fabExpanded = false
-                        vm.addNewItem() // o navegación
-                    },
-                    onNewSupplementClick = {
-                        fabExpanded = false
-                        vm.addNewItem() // o navegación
-                    }
-                )
-            }
-        }
-
-    }
-}*/
 
 @Composable
 fun AddItemsScreen(
@@ -112,6 +55,7 @@ fun AddItemsScreen(
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .verticalScroll(rememberScrollState())
         ) {
             when (state.selectedTab) {
                 "Ejercicios" -> ExerciseList(

@@ -31,9 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MenuItemColors
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import com.liudao.constants.DefaultMuscleGroups
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +60,11 @@ fun ItemFormScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { nc.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver",
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -88,7 +95,11 @@ fun ItemFormScreen(
             OutlinedTextField(
                 value = state.name,
                 onValueChange = vm::onNameChange,
-                label = { Text("Nombre del ejercicio") },
+                label = { Text(
+                    "Nombre del ejercicio",
+                    color = Color.White) },
+                // Estilo para el texto de entrada
+                textStyle = TextStyle(color = Color.White),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -104,13 +115,31 @@ fun ItemFormScreen(
                     readOnly = true,
                     value = selectedGroupName,
                     onValueChange = {},
-                    label = { Text("Grupo muscular") },
+                    label = { Text(
+                        "Grupo muscular",
+                        color = Color.White
+                    ) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded)
                     },
+                    // Estilo para el texto de entrada
+                    textStyle = TextStyle(color = Color.White),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White,
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.LightGray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.Gray,
+
+                        // Colores para el trailing icon (el triangulito)
+                        focusedTrailingIconColor = Color.White,
+                        unfocusedTrailingIconColor = Color.White
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor() // ✅ FUNCIONA aunque esté deprecado (se elimina en Compose 1.7)
+                        .menuAnchor() // ✅ FUNCIONA aunque esté deprecado. Y no funca para nada si no se lo agrega
                 )
 
                 ExposedDropdownMenu(
@@ -119,7 +148,11 @@ fun ItemFormScreen(
                 ) {
                     DefaultMuscleGroups.forEach { group ->
                         DropdownMenuItem(
-                            text = { Text(group.name) },
+                            text = {
+                                Text(
+                                    group.name,
+                                    color = Color.Black
+                                )},
                             onClick = {
                                 vm.onGroupSelected(group.id)
                                 isDropdownExpanded = false
