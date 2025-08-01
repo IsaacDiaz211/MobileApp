@@ -46,8 +46,8 @@ fun AddItemsScreen(
             ExpandableFab(
                 expanded = fabExpanded,
                 onFabClick = { fabExpanded = !fabExpanded },
-                onNewExerciseClick = { nc.navigate("itemForm/Ejercicio") },
-                onNewSupplementClick = { nc.navigate("itemForm/Suplemento") },
+                onNewExerciseClick = { nc.navigate("exerciseForm/") },
+                onNewSupplementClick = { nc.navigate("suppForm/") },
             )
         },
         containerColor = Color.Transparent
@@ -60,12 +60,12 @@ fun AddItemsScreen(
             when (state.selectedTab) {
                 "Ejercicios" -> ExerciseList(
                     exercises = state.exercises,
-                    onEdit = { exercise -> nc.navigate("itemForm/Ejercicio?id=${exercise.id}") },
+                    onEdit = { exercise -> nc.navigate("exerciseForm/?id=${exercise.id}") },
                     onDelete = vm::onDeleteExercise
                 )
                 "Suplementos" -> SupplementList(
                     supplements = state.supplements,
-                    onEdit = { supplement -> nc.navigate("itemForm/Suplemento?id=${supplement.id}") },
+                    onEdit = { supplement -> nc.navigate("suppForm/?id=${supplement.id}") },
                     onDelete = vm::onDeleteSupplement
                 )
             }

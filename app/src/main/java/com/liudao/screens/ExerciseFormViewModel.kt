@@ -6,40 +6,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liudao.domain.models.Exercise
 import com.liudao.domain.models.MuscleGroup
-import com.liudao.domain.models.Supplement
 import com.liudao.domain.repositories.ExerciseRepository
-import com.liudao.domain.repositories.PeriodRepository
-import com.liudao.domain.repositories.SupplementRepository
 import com.liudao.constants.DefaultMuscleGroups
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class ItemFormUiState(
+data class ExerciseFormUiState(
     val name: String = "",
     val selectedGroupId: Long? = null,
     val muscleGroups: List<MuscleGroup> = DefaultMuscleGroups,
     val isEdit: Boolean = false,
-    val exerciseId: Long? = null
+    val exerciseId: Long? = null,
 )
 
-
 @HiltViewModel
-class ItemFormViewModel @Inject constructor(
+class ExerciseFormViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val exerciseRepo: ExerciseRepository,
-    private val supplementRepo: SupplementRepository,
-    private val periodRepo: PeriodRepository
+    private val exerciseRepo: ExerciseRepository
 ): ViewModel()  {
     private val exerciseId: Long? = savedStateHandle["id"]
-    private val _uiState = MutableStateFlow(ItemFormUiState())
-    val uiState: StateFlow<ItemFormUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ExerciseFormUiState())
+    val uiState: StateFlow<ExerciseFormUiState> = _uiState.asStateFlow()
 
     init {
         if (exerciseId != null) {
@@ -84,7 +76,6 @@ class ItemFormViewModel @Inject constructor(
             } else {
                 val new = Exercise(name = name, muscleGroupId = groupId)
                 var id = exerciseRepo.insert(new)
-                Log.d("ItemFormViewModel", "onSave: ${new.name}, id:  ${id}")
             }
             onFinish()
         }

@@ -16,10 +16,16 @@ sealed class Screen(val route: String) {
     object History : Screen("history")
     object AddItems : Screen("addItems")
 
-    object ItemForm : Screen("itemForm/{tipo}?id={id}") {
-        fun route(tipo: String, id: Long? = null): String {
-            return if (id != null) "ItemForm/$tipo?id=$id"
-            else "ItemForm/$tipo"
+    object ExerciseForm : Screen("exerciseForm/?id={id}") {
+        fun route(id: Long? = null): String {
+            return if (id != null) "ExerciseForm/?id=$id"
+            else "ExerciseForm"
+        }
+    }
+    object SuppForm : Screen("suppForm/?id={id}") {
+        fun route(id: Long? = null): String {
+            return if (id != null) "SuppForm/?id=$id"
+            else "SuppForm"
         }
     }
 }
@@ -34,9 +40,8 @@ fun NavGraph(navController: NavHostController) {
         composable(Screen.History.route) { HistoryScreen() }
         composable(Screen.AddItems.route) { AddItemsScreen(navController) }
         composable(
-            route = "itemForm/{tipo}?id={id}",
+            route = "exerciseForm/?id={id}",
             arguments = listOf(
-                navArgument("tipo") { type = NavType.StringType },
                 navArgument("id") {
                     type = NavType.LongType
                     defaultValue = -1L
@@ -44,9 +49,21 @@ fun NavGraph(navController: NavHostController) {
                 }
             )
         ) { backStackEntry ->
-            val tipo = backStackEntry.arguments?.getString("tipo") ?: "Ejercicio"
             val id = backStackEntry.arguments?.getLong("id")?.takeIf { it != -1L }
-            ItemFormScreen(navController)
+            ExerciseFormScreen(navController)
+        }
+        composable(
+            route = "suppForm/?id={id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.LongType
+                    defaultValue = -1L
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getLong("id")?.takeIf { it != -1L }
+            SuppFormScreen(navController)
         }
     }
 }
