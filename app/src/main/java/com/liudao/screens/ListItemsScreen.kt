@@ -11,9 +11,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,12 +31,14 @@ import com.liudao.components.ExpandableFab
 import com.liudao.components.TopTabSelector
 
 @Composable
-fun AddItemsScreen(
+fun ListItemsScreen(
     nc: NavController,
-    vm: AddItemsViewModel = hiltViewModel()
+    vm: ListItemsViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
+    var exerciseToDelete by rememberSaveable { mutableStateOf<Exercise?>(null) }
+
     Scaffold(
         topBar = {
             TopTabSelector(
@@ -69,6 +73,29 @@ fun AddItemsScreen(
                     onDelete = vm::onDeleteSupplement
                 )
             }
+            if (exerciseToDelete != null) {
+                AlertDialog(
+                    onDismissRequest = { exerciseToDelete = null },
+                    title = { Text("Confirmar eliminación") },
+                    text = { Text("¿Seguro que quieres eliminar \"${exerciseToDelete!!.name}\"?") },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                vm.onDeleteExercise(exerciseToDelete!!.id)
+                                exerciseToDelete = null
+                            }
+                        ) {
+                            Text("Eliminar")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { exerciseToDelete = null }) {
+                            Text("Cancelar")
+                        }
+                    }
+                )
+            }
+
         }
     }
 }

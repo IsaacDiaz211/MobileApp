@@ -14,7 +14,7 @@ sealed class Screen(val route: String) {
     object Timer : Screen("timer")
     object Progress : Screen("progress")
     object History : Screen("history")
-    object AddItems : Screen("addItems")
+    object ListItems : Screen("listItems")
 
     object ExerciseForm : Screen("exerciseForm/?id={id}") {
         fun route(id: Long? = null): String {
@@ -38,7 +38,7 @@ fun NavGraph(navController: NavHostController) {
         composable(Screen.Timer.route) { TimerScreen() }
         composable(Screen.Progress.route) { ProgressScreen() }
         composable(Screen.History.route) { HistoryScreen() }
-        composable(Screen.AddItems.route) { AddItemsScreen(navController) }
+        composable(Screen.ListItems.route) { ListItemsScreen(navController) }
         composable(
             route = "exerciseForm/?id={id}",
             arguments = listOf(
