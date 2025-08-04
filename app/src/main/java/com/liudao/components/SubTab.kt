@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,32 +21,33 @@ import com.liudao.ui.theme.Brand
 
 @Composable
 fun SubTab(
-    titles: List<String>,
-    selectedIndex: Int,
-    onTabSelected: (Int) -> Unit
+    selectedTab: String,
+    onTabSelected: (String) -> Unit
 ) {
+    val titles = listOf("Ejercicios", "Suplementos")
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp) // esto añade espacio entre las pildoritas
     ) {
-        titles.forEachIndexed { index, title ->
+        titles.forEach { title ->
+            val selected = title == selectedTab
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .background(
-                        if (selectedIndex == index) Brand
+                        if (selected) Brand
                         else Container
                     )
-                    .clickable { onTabSelected(index) }
+                    .clickable { onTabSelected(title) }
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
                     text = title,
-                    color = OnPrimary
+                    color = if (selected) OnPrimary else Brand
                 )
             }
-            if (index < titles.lastIndex) Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }

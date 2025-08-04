@@ -1,5 +1,6 @@
 package com.liudao.screens
 
+import com.liudao.ui.theme.LiuDaoTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,65 +31,67 @@ fun HomeScreen(
     vm: HomeViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
-
-    Scaffold(
-        topBar = { TopBar(date = state.today) } ,
-        containerColor = Color.Transparent
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .fillMaxSize()
-        ){
-            Column(
+    LiuDaoTheme {
+        Scaffold(
+            topBar = { TopBar(date = state.today) } ,
+            containerColor = Color.Transparent
+        ) { padding ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 80.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                // 2) Lista desplegable de coincidencias
-                if (state.searchResults.isNotEmpty()) {
-                    ExerciseSuggestions(
-                        list = state.searchResults,
-                        onSelect = { ex ->
-                            vm.selectExercise(ex)
-                            // Mostrar inmediatamente los inputs para ese ejercicio
-                        }
+                    .padding(padding)
+                    .fillMaxSize()
+            ){
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 80.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // 2) Lista desplegable de coincidencias
+                    if (state.searchResults.isNotEmpty()) {
+                        ExerciseSuggestions(
+                            list = state.searchResults,
+                            onSelect = { ex ->
+                                vm.selectExercise(ex)
+                                // Mostrar inmediatamente los inputs para ese ejercicio
+                            }
+                        )
+                    }
+
+                    // 3) Sets actuales (agrupados por ejercicio)
+                    SetsList(
+                        sets = state.currentSets,
+                        onAddSameWeight = { idx -> /* igual peso */ },
+                        onAddDifferentWeight = { idx -> /* nuevo peso */ }
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .clip(RoundedCornerShape(40.dp))
+                        .background(Color.Transparent)
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    // 1) Buscador
+                    SearchRow(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 16.dp)
+                            .padding(horizontal = 16.dp),
+                        text = state.searchText,
+                        onTextChange = vm::onSearchChange,
+                        onAddClick = { /* acción para crear ejercicio */ }
                     )
                 }
 
-                // 3) Sets actuales (agrupados por ejercicio)
-                SetsList(
-                    sets = state.currentSets,
-                    onAddSameWeight = { idx -> /* igual peso */ },
-                    onAddDifferentWeight = { idx -> /* nuevo peso */ }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .clip(RoundedCornerShape(40.dp))
-                    .background(Color.Transparent)
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                // 1) Buscador
-                SearchRow(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 16.dp)
-                        .padding(horizontal = 16.dp),
-                    text = state.searchText,
-                    onTextChange = vm::onSearchChange,
-                    onAddClick = { /* acción para crear ejercicio */ }
-                )
-            }
 
-
+            }
         }
     }
+
 }
 
 @Composable

@@ -1,9 +1,7 @@
 package com.liudao.screens
 
-//import android.app.DatePickerDialog
 import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.material3.Scaffold
@@ -24,13 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,12 +36,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.input.pointer.pointerInput
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
-import java.util.Date
-import java.util.Locale
+import com.liudao.ui.theme.LiuDaoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,96 +47,98 @@ fun SuppFormScreen(
     vm: SuppFormViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsState()
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        if (state?.supplementId == null) "Nuevo suplemento" else "Editar suplemento",
-                        color = Color.White
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { nc.popBackStack() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = Color.White
+    LiuDaoTheme {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            if (state?.supplementId == null) "Nuevo suplemento" else "Editar suplemento",
+                            color = Color.White
                         )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    vm.onSave {
-                        nc.popBackStack()
-                    }
-                },
-                shape = CircleShape,
-                contentColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(Icons.Default.Save, contentDescription = "Guardar")
-            }
-        },
-        containerColor = Color.Transparent
-    ) { padding ->
-
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Nombre del suplemento
-            OutlinedTextField(
-                value = state?.name ?: "",
-                onValueChange = vm::onNameChange,
-                label = { Text(
-                    "Nombre del suplemento",
-                    color = Color.White
-                ) },
-                textStyle = TextStyle(color = Color.White),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Fecha de inicio
-            DateField(
-                label = "Fecha de inicio",
-                date = state?.startDate,
-                onDateSelected = vm::onStartDateChange
-            )
-
-            // Fecha de fin
-            DateField(
-                label = "Fecha de fin (opcional)",
-                date = state?.endDate,
-                onDateSelected = vm::onEndDateChange
-            )
-            Button(onClick = { Log.d("SuppFormScreen", "Test Button Clicked") }) {
-                Text("Test Click")
-            }
-
-            // Periodos existentes
-            if (state?.isEdit == true && state!!.periods.isNotEmpty()) {
-                Text("Periodos previos:", style = MaterialTheme.typography.titleMedium)
-                state!!.periods.forEachIndexed { i, period ->
-                    Text("- ${period.start} hasta ${period.end ?: "Actual"}")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { nc.popBackStack() }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Volver",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        vm.onSave {
+                            nc.popBackStack()
+                        }
+                    },
+                    shape = CircleShape,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Icon(Icons.Default.Save, contentDescription = "Guardar")
                 }
-            }
+            },
+            containerColor = Color.Transparent
+        ) { padding ->
 
-            // Agregar nuevo periodo
-            if (state?.isEdit == true && state!!.canAddPeriod) {
-                Button(onClick = vm::onAddPeriod) {
-                    Text("Agregar nuevo periodo")
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Nombre del suplemento
+                OutlinedTextField(
+                    value = state?.name ?: "",
+                    onValueChange = vm::onNameChange,
+                    label = { Text(
+                        "Nombre del suplemento",
+                        color = Color.White
+                    ) },
+                    textStyle = TextStyle(color = Color.White),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // Fecha de inicio
+                DateField(
+                    label = "Fecha de inicio",
+                    date = state?.startDate,
+                    onDateSelected = vm::onStartDateChange
+                )
+
+                // Fecha de fin
+                DateField(
+                    label = "Fecha de fin (opcional)",
+                    date = state?.endDate,
+                    onDateSelected = vm::onEndDateChange
+                )
+                Button(onClick = { Log.d("SuppFormScreen", "Test Button Clicked") }) {
+                    Text("Test Click")
+                }
+
+                // Periodos existentes
+                if (state?.isEdit == true && state!!.periods.isNotEmpty()) {
+                    Text("Periodos previos:", style = MaterialTheme.typography.titleMedium)
+                    state!!.periods.forEachIndexed { i, period ->
+                        Text("- ${period.start} hasta ${period.end ?: "Actual"}")
+                    }
+                }
+
+                // Agregar nuevo periodo
+                if (state?.isEdit == true && state!!.canAddPeriod) {
+                    Button(onClick = vm::onAddPeriod) {
+                        Text("Agregar nuevo periodo")
+                    }
                 }
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

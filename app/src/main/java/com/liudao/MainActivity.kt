@@ -37,22 +37,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun LiuDaoStyledApp() {
     val navController = rememberNavController()
-
-    Scaffold(
-        bottomBar = { BottomNavBar(navController) },
-        containerColor = Color.Transparent
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(BackgroundL, BackgroundR)
+    LiuDaoTheme {
+        Scaffold(
+            bottomBar = { BottomNavBar(navController) },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(BackgroundL, BackgroundR)
+                        )
                     )
-                )
-        ) {
-            NavGraph(navController)
+            ) {
+                NavGraph(navController)
+            }
         }
     }
+
 }

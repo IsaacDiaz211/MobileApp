@@ -1,5 +1,6 @@
 package com.liudao.screens
 
+import com.liudao.ui.theme.LiuDaoTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -57,47 +58,50 @@ import androidx.compose.ui.draw.clip
 }*****/
 @Composable
 fun TimerScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Temporizador 00:00
-        Text(
-            text = "00:00",
-            style = MaterialTheme.typography.displayLarge,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-        
-        // Botones de tiempo predefinido
-        Row(
-            modifier = Modifier.padding(bottom = 32.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+    LiuDaoTheme {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            listOf("1:30", "2:30", "3:00", "5:00").forEach { time ->
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF1E1E1E))
-                        .clickable { /* Iniciar tiempo */ }
-                        .padding(16.dp)
-                ) {
-                    Text(text = time, color = Color.White)
+            // Temporizador 00:00
+            Text(
+                text = "00:00",
+                style = MaterialTheme.typography.displayLarge,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            // Botones de tiempo predefinido
+            Row(
+                modifier = Modifier.padding(bottom = 32.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                listOf("1:30", "2:30", "3:00", "5:00").forEach { time ->
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF1E1E1E))
+                            .clickable { /* Iniciar tiempo */ }
+                            .padding(16.dp)
+                    ) {
+                        Text(text = time, color = Color.White)
+                    }
                 }
             }
-        }
-        
-        // Botón "Iniciar" (óvalo alargado)
-        Box(
-            modifier = Modifier
-                .width(120.dp)
-                .height(48.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(Color(0xFF4A6CF7))
-                .clickable { /* Lógica */ },
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Iniciar", color = Color.White)
+
+            // Botón "Iniciar" (óvalo alargado)
+            Box(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Color(0xFF4A6CF7))
+                    .clickable { /* Lógica */ },
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Iniciar", color = Color.White)
+            }
         }
     }
+
 }
