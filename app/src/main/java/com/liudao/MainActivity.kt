@@ -29,19 +29,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FluentStyledApp()
+            LiuDaoStyledApp()
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun FluentStyledAppPreview() {
-    FluentStyledApp()
-}
-
-@Composable
-fun FluentStyledApp() {
+fun LiuDaoStyledApp() {
     val navController = rememberNavController()
 
     Scaffold(
@@ -53,8 +47,8 @@ fun FluentStyledApp() {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(PurpleBlack, DarkRed, Violet)
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(BackgroundL, BackgroundR)
                     )
                 )
         ) {

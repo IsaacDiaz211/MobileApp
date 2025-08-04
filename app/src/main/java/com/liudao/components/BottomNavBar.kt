@@ -12,10 +12,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-
+import com.liudao.ui.theme.*
 @Composable
 fun BottomNavBar(navController: NavController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -29,8 +30,8 @@ fun BottomNavBar(navController: NavController) {
             com.liudao.navigation.Screen.Timer to Icons.Default.Timer,
             com.liudao.navigation.Screen.Progress to Icons.Default.BarChart,
             com.liudao.navigation.Screen.History to Icons.AutoMirrored.Filled.List,
-            com.liudao.navigation.Screen.AddItems to Icons.Default.AddCircleOutline
-        ).forEach { (screen, icon) ->
+            com.liudao.navigation.Screen.ListItems to Icons.Default.AddCircleOutline
+        ).forEach { (screen, icon: ImageVector) ->
             NavigationBarItem(
                 selected = currentRoute == screen.route,
                 onClick = { navController.navigate(screen.route) },
@@ -38,9 +39,9 @@ fun BottomNavBar(navController: NavController) {
                     Icon(icon, contentDescription = null)
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.White,
-                    unselectedIconColor = Color.LightGray,
-                    indicatorColor = Color(0xFF780CAD)
+                    selectedIconColor = Brand,
+                    unselectedIconColor = Color.White,
+                    indicatorColor = Color.Transparent
                 )
             )
         }

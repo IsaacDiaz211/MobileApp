@@ -1,6 +1,7 @@
 package com.liudao.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.clip
 
-@Composable
-fun TimerScreen() {
+//@Composable
+/*fun TimerScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,13 +45,59 @@ fun TimerScreen() {
         Spacer(Modifier.height(40.dp))
 
         Button(
-            onClick = { /* TODO */ },
+            onClick = { TODO  },
             shape = RoundedCornerShape(50),
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(56.dp)
         ) {
             Text("Iniciar")
+        }
+    }
+}*****/
+@Composable
+fun TimerScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Temporizador 00:00
+        Text(
+            text = "00:00",
+            style = MaterialTheme.typography.displayLarge,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+        
+        // Botones de tiempo predefinido
+        Row(
+            modifier = Modifier.padding(bottom = 32.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            listOf("1:30", "2:30", "3:00", "5:00").forEach { time ->
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF1E1E1E))
+                        .clickable { /* Iniciar tiempo */ }
+                        .padding(16.dp)
+                ) {
+                    Text(text = time, color = Color.White)
+                }
+            }
+        }
+        
+        // Botón "Iniciar" (óvalo alargado)
+        Box(
+            modifier = Modifier
+                .width(120.dp)
+                .height(48.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF4A6CF7))
+                .clickable { /* Lógica */ },
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Iniciar", color = Color.White)
         }
     }
 }
