@@ -19,8 +19,12 @@ class SupplementRepository @Inject constructor(
     override suspend fun insert(sup: Supplement): Long =
         dao.insert(sup.toEntity())
 
-    override suspend fun delete(sup: Supplement) =
-        dao.delete(sup.toEntity())
+    override suspend fun delete(sup: Long) {
+        val toDelete = dao.getById(sup)
+        if (toDelete != null) {
+            dao.delete(toDelete)
+        }
+    }
 
     override suspend fun update(sup: Supplement) =
         dao.update(sup.toEntity())

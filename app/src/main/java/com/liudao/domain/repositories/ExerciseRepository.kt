@@ -20,8 +20,13 @@ class ExerciseRepository @Inject constructor(
     override suspend fun insert(exercise: Exercise): Long =
         dao.insert(exercise.toEntity())
 
-    override suspend fun delete(exercise: Exercise) =
-        dao.delete(exercise.toEntity())
+    override suspend fun delete(exercise: Long) {
+        var toDelete = dao.getById(exercise)
+        if(toDelete != null) {
+            dao.delete(toDelete)
+        }
+    }
+
     override suspend fun search(text: String): Flow<List<Exercise>> =
         dao.search(text).map { list -> list.map { it.toDomain() } }
 

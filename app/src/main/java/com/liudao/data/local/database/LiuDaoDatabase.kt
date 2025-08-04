@@ -15,7 +15,7 @@ import com.liudao.data.local.dao.*
         SetEntity::class,
         CardioSetEntity::class,
         PeriodEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class LiuDaoDatabase: RoomDatabase() {

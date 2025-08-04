@@ -28,9 +28,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -38,7 +35,6 @@ import com.liudao.domain.models.Exercise
 import com.liudao.domain.models.Supplement
 import com.liudao.components.ExpandableFab
 import com.liudao.components.SubTab
-import com.liudao.components.TopTabSelector
 import com.liudao.ui.theme.LiuDaoTheme
 
 @Composable
@@ -49,6 +45,8 @@ fun ListItemsScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
     var exerciseToDelete by rememberSaveable { mutableStateOf<Exercise?>(null) }
+    var supplementToDelete by rememberSaveable { mutableStateOf<Supplement?>(null) }
+
     val scrimVisible = fabExpanded
     LiuDaoTheme {
         Scaffold(
@@ -78,24 +76,25 @@ fun ListItemsScreen(
                     "Ejercicios" -> ExerciseList(
                         exercises = state.exercises,
                         onEdit = { exercise -> nc.navigate("exerciseForm/?id=${exercise.id}") },
-                        onDelete = vm::onDeleteExercise
+                        onDelete = { exerciseToDelete = it }
+
                     )
 
                     "Suplementos" -> SupplementList(
                         supplements = state.supplements,
                         onEdit = { supplement -> nc.navigate("suppForm/?id=${supplement.id}") },
-                        onDelete = vm::onDeleteSupplement
+                        onDelete = { supplementToDelete = it }
                     )
                 }
-                if (exerciseToDelete != null) {
+                exerciseToDelete?.let { exercise ->
                     AlertDialog(
                         onDismissRequest = { exerciseToDelete = null },
                         title = { Text("Confirmar eliminación") },
-                        text = { Text("¿Seguro que quieres eliminar \"${exerciseToDelete!!.name}\"?") },
+                        text = { Text("¿Seguro que querés eliminar \"${exercise.name}\"?") },
                         confirmButton = {
                             TextButton(
                                 onClick = {
-                                    vm.onDeleteExercise(exerciseToDelete!!.id)
+                                    vm.onDeleteExercise(exercise.id)
                                     exerciseToDelete = null
                                 }
                             ) {
@@ -109,7 +108,31 @@ fun ListItemsScreen(
                         }
                     )
                 }
+
+                supplementToDelete?.let { supp ->
+                    AlertDialog(
+                        onDismissRequest = { supplementToDelete = null },
+                        title = { Text("Confirmar eliminación") },
+                        text = { Text("¿Seguro que querés eliminar \"${supp.name}\"?") },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    vm.onDeleteSupplement(supp.id)
+                                    supplementToDelete = null
+                                }
+                            ) {
+                                Text("Eliminar")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { supplementToDelete = null }) {
+                                Text("Cancelar")
+                            }
+                        }
+                    )
+                }
             }
+
             AnimatedVisibility(
                 visible = scrimVisible,
                 enter = fadeIn(),
@@ -127,8 +150,6 @@ fun ListItemsScreen(
                 ) {}
             }
         }
-        // Scrim (capa semi-transparente)
-
     }
 }
 
@@ -138,7 +159,7 @@ fun ListItemsScreen(
 fun ExerciseList(
     exercises: List<Exercise>,
     onEdit: (Exercise) -> Unit,
-    onDelete: (Long) -> Unit
+    onDelete: (Exercise) -> Unit
 ) {
     Column {
         exercises.forEach {
@@ -151,7 +172,7 @@ fun ExerciseList(
 fun SupplementList(
     supplements: List<Supplement>,
     onEdit: (Supplement) -> Unit,
-    onDelete: (Long) -> Unit
+    onDelete: (Supplement) -> Unit
 ) {
     Column {
         supplements.forEach {
@@ -164,7 +185,7 @@ fun SupplementList(
 fun ExerciseItem(
     exercise: Exercise,
     onEdit: (Exercise) -> Unit,
-    onDelete: (Long) -> Unit
+    onDelete: (Exercise) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -182,10 +203,8 @@ fun ExerciseItem(
                 "Editar",
                 tint = Color.White)
         }
-        IconButton(onClick = { onDelete(exercise.id) }) {
-            Icon(Icons.Default.Delete,
-                "Eliminar",
-                tint = Color.White)
+        IconButton(onClick = { onDelete(exercise) }) {
+            Icon(Icons.Default.Delete, "Eliminar")
         }
     }
 }
@@ -194,7 +213,7 @@ fun ExerciseItem(
 fun SupplementItem(
     supp: Supplement,
     onEdit: (Supplement) -> Unit,
-    onDelete: (Long) -> Unit
+    onDelete: (Supplement) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -210,7 +229,7 @@ fun SupplementItem(
         IconButton(onClick = { onEdit(supp) }) {
             Icon(Icons.Default.Edit, "Editar")
         }
-        IconButton(onClick = { onDelete(supp.id) }) {
+        IconButton(onClick = { onDelete(supp) }) {
             Icon(Icons.Default.Delete, "Eliminar")
         }
     }

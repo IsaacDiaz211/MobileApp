@@ -3,6 +3,7 @@ package com.liudao.data.local.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.Index
 
 @Entity(
     tableName = "sets",
@@ -18,7 +19,11 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["routineId"],
             onDelete = ForeignKey.CASCADE
-        )]
+        )],
+    indices = [
+        Index(value = ["exerciseId"]),
+        Index(value = ["routineId"])
+    ]
 )
 data class SetEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

@@ -1,6 +1,5 @@
 package com.liudao.screens
 
-import androidx.compose.material3.AlertDialog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liudao.domain.models.Exercise
@@ -52,15 +51,12 @@ class ListItemsViewModel @Inject constructor(
     }
 
     // TODO: implementar la eliminación con una ventana de advertencia
+    // ViewModel
     fun onDeleteExercise(id: Long) {
-        viewModelScope.launch {
-            //exerciseRepo.deleteById(id)
-        }
+        viewModelScope.launch { exerciseRepo.delete(id) }
     }
 
     fun onDeleteSupplement(id: Long) {
-        viewModelScope.launch {
-            //supplementRepo.deleteById(id)
-        }
+        viewModelScope.launch { supplementRepo.delete(id) }
     }
 }
