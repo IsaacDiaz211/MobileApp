@@ -15,12 +15,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +32,11 @@ import androidx.navigation.NavController
 import com.liudao.domain.models.Exercise
 import com.liudao.domain.models.Supplement
 import com.liudao.components.ExpandableFab
+import com.liudao.components.LDAlertDialog
+import com.liudao.components.LDButton
 import com.liudao.components.SubTab
+import com.liudao.ui.theme.Container
+import com.liudao.ui.theme.Error
 import com.liudao.ui.theme.LiuDaoTheme
 
 @Composable
@@ -87,47 +89,53 @@ fun ListItemsScreen(
                     )
                 }
                 exerciseToDelete?.let { exercise ->
-                    AlertDialog(
+                    LDAlertDialog(
                         onDismissRequest = { exerciseToDelete = null },
                         title = { Text("Confirmar eliminación") },
                         text = { Text("¿Seguro que querés eliminar \"${exercise.name}\"?") },
                         confirmButton = {
-                            TextButton(
+                            LDButton(
+                                text = "Eliminar",
+                                isPrimary = true,
                                 onClick = {
                                     vm.onDeleteExercise(exercise.id)
                                     exerciseToDelete = null
-                                }
-                            ) {
-                                Text("Eliminar")
-                            }
+                                },
+                                color = Error
+                            )
                         },
                         dismissButton = {
-                            TextButton(onClick = { exerciseToDelete = null }) {
-                                Text("Cancelar")
-                            }
+                            LDButton(
+                                text = "Cancelar",
+                                onClick = { exerciseToDelete = null },
+                                color = Color.Transparent
+                            )
                         }
                     )
                 }
 
                 supplementToDelete?.let { supp ->
-                    AlertDialog(
-                        onDismissRequest = { supplementToDelete = null },
+                    LDAlertDialog(
+                        onDismissRequest = { exerciseToDelete = null },
                         title = { Text("Confirmar eliminación") },
                         text = { Text("¿Seguro que querés eliminar \"${supp.name}\"?") },
                         confirmButton = {
-                            TextButton(
+                            LDButton(
+                                text = "Eliminar",
+                                isPrimary = true,
                                 onClick = {
-                                    vm.onDeleteSupplement(supp.id)
+                                    vm.onDeleteExercise(supp.id)
                                     supplementToDelete = null
-                                }
-                            ) {
-                                Text("Eliminar")
-                            }
+                                },
+                                color = Error
+                            )
                         },
                         dismissButton = {
-                            TextButton(onClick = { supplementToDelete = null }) {
-                                Text("Cancelar")
-                            }
+                            LDButton(
+                                text = "Cancelar",
+                                onClick = { supplementToDelete = null },
+                                color = Container
+                            )
                         }
                     )
                 }

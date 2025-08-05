@@ -25,7 +25,7 @@ fun BottomNavBar(navController: NavController) {
 
     NavigationBar(
         //containerColor = Color(0xFF50315E),
-        containerColor = ContainerUnselected,
+        containerColor = BackgroundR,
         tonalElevation = 4.dp
     ) {
         listOf(

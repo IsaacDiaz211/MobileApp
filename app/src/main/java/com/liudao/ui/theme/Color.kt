@@ -10,7 +10,7 @@ val BackgroundL = Color(0xFF7F005F) // Dark Red Background
 val BackgroundR = Color(0xFF270F31) // Dark Purple Background
 
 val Container = Color(0xFFCBAFCA) // Light Purple Container, for inputs, search bars, etc
-val ContainerUnselected = Color(0xFF4E2060) // Light Purple Container, for unselected items
+val ContainerSelected = Color(0xFF4E2060) // Light Purple Container, for unselected items
 // Text Colors
 val OnPrimary = Color(0xFFE6CDEC) // White Purple text on primary
 
