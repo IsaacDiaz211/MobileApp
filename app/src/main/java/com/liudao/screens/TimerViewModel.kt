@@ -16,13 +16,12 @@ import javax.inject.Inject
 class TimerViewModel @Inject constructor() : ViewModel() {
     private val _timeLeft = MutableStateFlow(0L)
     val timeLeft: StateFlow<Long> = _timeLeft
-
     private val _isRunning = MutableStateFlow(false)
     val isRunning: StateFlow<Boolean> = _isRunning
 
     private var timerJob: Job? = null
 
-    private val _currentSeconds = MutableStateFlow(180)   // 3:00 por defecto
+    private val _currentSeconds = MutableStateFlow(0)   // 0:00 por defecto
     val currentSeconds: StateFlow<Int> = _currentSeconds
 
     // Límites
@@ -34,17 +33,14 @@ class TimerViewModel @Inject constructor() : ViewModel() {
     // Función para establecer el tiempo
     fun setDuration(seconds: Int) {
         _timeLeft.value = seconds * 1000L
+        _currentSeconds.value = seconds
     }
 
     // Función para cambiar el tiempo
     fun adjustTime(delta: Int) {
         val new = (_currentSeconds.value + delta).coerceIn(MIN_SECONDS, MAX_SECONDS)
         _currentSeconds.value = new
-    }
-
-    // Función para establecer un tiempo predefinido
-    fun setTime(seconds: Int) {
-        _currentSeconds.value = seconds.coerceIn(MIN_SECONDS, MAX_SECONDS)
+        setDuration(new)
     }
 
     // Convierte segundos a mm:ss

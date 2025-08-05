@@ -2,6 +2,7 @@ package com.liudao.screens
 
 import com.liudao.ui.theme.LiuDaoTheme
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -89,51 +90,73 @@ fun TimerScreen(
             ) {
 
                 // Botón “-30”
-                IconButton(
+                Button(
                     onClick = { vm.adjustTime(-30) },
-                    enabled = currentSeconds >= 30
+                    enabled = currentSeconds >= 30 && !isRunning,
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (currentSeconds >= 30) ContainerSelected else Container
+                    )
                 ) {
                     Icon(
                         Icons.Default.Remove,
                         contentDescription = "Restar 30 s",
-                        tint = if (currentSeconds >= 30) ContainerSelected else Container
+                        tint = OnPrimary
                     )
                 }
                 // Temporizador
                 Text(
                     text = vm.format(timeLeft),
                     style = MaterialTheme.typography.displayLarge,
-                    modifier = Modifier.padding(bottom = 32.dp)
+                    modifier = Modifier.padding(bottom = 32.dp),
+                    color = OnPrimary
                 )
                 // Botón “+30”
-                IconButton(
+                Button(
                     onClick = { vm.adjustTime(30) },
-                    enabled = currentSeconds <= 570
+                    enabled = currentSeconds <= 570,
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (currentSeconds >= 30) ContainerSelected else Container
+                    )
                 ) {
                     Icon(
                         Icons.Default.Add,
                         contentDescription = "Sumar 30 s",
-                        tint = if (currentSeconds <= 570) ContainerSelected else Container
+                        tint = OnPrimary
                     )
                 }
             }
 
             // Botones de tiempo
-            Row(Modifier.padding(bottom = 32.dp), Arrangement.spacedBy(16.dp)) {
-                times.forEach { sec ->
-                    Box(
-                        Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Container)
-                            .clickable { vm.setDuration(sec) }
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            "${sec / 60}:${(sec % 60).toString().padStart(2, '0')}",
-                            color = OnPrimary
-                        )
+            Row(
+                Modifier.padding(bottom = 32.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    times.forEach { sec ->
+                        val isSelected: Boolean = sec == currentSeconds
+                        Box(
+                            Modifier
+                                .clip(CircleShape)
+                                .then(
+                                    if(isSelected)
+                                        Modifier.border(
+                                            width = 2.dp,
+                                            color = Brand,
+                                            shape = CircleShape
+                                        )
+                                    else Modifier
+                                )
+                                .background(Container)
+                                .clickable { vm.setDuration(sec) }
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                "${sec / 60}:${(sec % 60).toString().padStart(2, '0')}",
+                                color = Brand
+                            )
+                        }
                     }
-                }
             }
 
             // Botón Iniciar / Detener
@@ -142,11 +165,11 @@ fun TimerScreen(
                     .width(120.dp)
                     .height(48.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(Color(0xFF4A6CF7))
+                    .background(Brand)
                     .clickable { if (isRunning) vm.stop() else vm.start() },
                 Alignment.Center
             ) {
-                Text(if (isRunning) "Detener" else "Iniciar", color = Brand)
+                Text(if (isRunning) "Detener" else "Iniciar", color = OnPrimary)
             }
         }
     }

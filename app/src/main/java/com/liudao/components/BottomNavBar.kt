@@ -1,5 +1,6 @@
 package com.liudao.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -12,6 +13,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,7 +26,6 @@ fun BottomNavBar(navController: NavController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     NavigationBar(
-        //containerColor = Color(0xFF50315E),
         containerColor = BackgroundR,
         tonalElevation = 4.dp
     ) {
@@ -35,6 +36,15 @@ fun BottomNavBar(navController: NavController) {
             com.liudao.navigation.Screen.History to Icons.AutoMirrored.Filled.List,
             com.liudao.navigation.Screen.ListItems to Icons.Default.AddCircleOutline
         ).forEach { (screen, icon: ImageVector) ->
+            val isSelected = currentRoute == screen.route
+
+            val selectedIconSize = 31.dp
+            val unselectedIconSize = 25.dp
+
+            val animatedSize by animateDpAsState(
+                targetValue = if (isSelected) selectedIconSize else unselectedIconSize,
+                label = "iconSizeAnimation"
+            )
             NavigationBarItem(
                 selected = currentRoute == screen.route,
                 onClick = {
@@ -47,7 +57,7 @@ fun BottomNavBar(navController: NavController) {
                     Icon(
                         icon,
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(animatedSize)
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
