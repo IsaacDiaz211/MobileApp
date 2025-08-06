@@ -1,6 +1,5 @@
 package com.liudao.screens
 
-import com.liudao.ui.theme.LiuDaoTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,48 +24,7 @@ import com.liudao.ui.theme.Container
 import com.liudao.ui.theme.ContainerSelected
 import com.liudao.ui.theme.OnPrimary
 
-//@Composable
-/*fun TimerScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("00:00", style = MaterialTheme.typography.displayLarge, color = Color.White)
-
-        Spacer(Modifier.height(32.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            listOf("1:30", "2:30", "3:00", "5:00").forEach {
-                Text(
-                    it,
-                    color = Color.White,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.1f))
-                        .padding(12.dp)
-                )
-            }
-        }
-
-        Spacer(Modifier.height(40.dp))
-
-        Button(
-            onClick = { TODO  },
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .height(56.dp)
-        ) {
-            Text("Iniciar")
-        }
-    }
-}*****/
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimerScreen(
     vm: TimerViewModel = hiltViewModel()
@@ -77,7 +35,21 @@ fun TimerScreen(
 
     val times = listOf(90, 150, 180, 300) // segundos para 1:30, 2:30, 3:00, 5:00 min
 
-    LiuDaoTheme {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Temporizador",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = OnPrimary
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+    )
+    { padding ->
         Column(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,

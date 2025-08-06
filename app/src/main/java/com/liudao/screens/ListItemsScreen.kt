@@ -3,6 +3,8 @@ package com.liudao.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.Scaffold
@@ -19,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +29,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -48,10 +56,33 @@ fun ListItemsScreen(
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
     var exerciseToDelete by rememberSaveable { mutableStateOf<Exercise?>(null) }
     var supplementToDelete by rememberSaveable { mutableStateOf<Supplement?>(null) }
-
     val scrimVisible = fabExpanded
+
+    val fabHeightDp = 72.dp
+
+    // Este estado controla la visibilidad del FAB de forma directa con nestedScroll
+    var fabVisibleNestedScroll by rememberSaveable { mutableStateOf(true) }
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                // Si el scroll es hacia abajo y el FAB está visible, se oculta
+                if (available.y < -5 && fabVisibleNestedScroll) {
+                    fabVisibleNestedScroll = false
+                    return Offset.Zero
+                }
+                // Si el scroll es hacia arriba y el FAB no está visible, se muestra
+                if (available.y > 5 && !fabVisibleNestedScroll) {
+                    fabVisibleNestedScroll = true
+                    return Offset.Zero
+                }
+                return Offset.Zero
+            }
+        }
+    }
     LiuDaoTheme {
         Scaffold(
+            modifier = Modifier.nestedScroll(nestedScrollConnection),
             topBar = {
                 SubTab(
                     selectedTab = state.selectedTab,
@@ -59,14 +90,31 @@ fun ListItemsScreen(
                 )
             },
             floatingActionButton = {
-                ExpandableFab(
-                    expanded = fabExpanded,
-                    onFabClick = { fabExpanded = !fabExpanded },
-                    onNewExerciseClick = { nc.navigate("exerciseForm/") },
-                    onNewSupplementClick = { nc.navigate("suppForm/") },
-                )
-            },
-            containerColor = Color.Transparent
+                AnimatedVisibility(
+                    visible = fabVisibleNestedScroll,
+                    enter = slideInVertically(initialOffsetY = { it * 2 }),
+                    exit = slideOutVertically(targetOffsetY = { it * 2 })
+                ){
+                    ExpandableFab(
+                        expanded = fabExpanded,
+                        onFabClick = {
+                            fabExpanded = !fabExpanded
+                            if (fabExpanded && !fabVisibleNestedScroll) {
+                                // Si lo expandimos y estaba oculto por scroll, lo forzamos a ser visible
+                                fabVisibleNestedScroll = true
+                            }
+                        },
+                        onNewExerciseClick = {
+                            fabExpanded = false
+                            nc.navigate("exerciseForm/")
+                        },
+                        onNewSupplementClick = {
+                            fabExpanded = false
+                            nc.navigate("suppForm/")
+                        },
+                    )
+                }
+            }
         ) { padding ->
             Box(
                 modifier = Modifier
@@ -74,19 +122,27 @@ fun ListItemsScreen(
                     .padding(padding)
                     .verticalScroll(rememberScrollState())
             ) {
+                LaunchedEffect(state.selectedTab) {
+                    if (fabExpanded) {
+                        fabExpanded = false
+                    }
+                }
                 when (state.selectedTab) {
-                    "Ejercicios" -> ExerciseList(
+                    "Ejercicios" -> {
+                        ExerciseList(
                         exercises = state.exercises,
                         onEdit = { exercise -> nc.navigate("exerciseForm/?id=${exercise.id}") },
-                        onDelete = { exerciseToDelete = it }
+                        onDelete = { exerciseToDelete = it },
+                        )
+                    }
 
-                    )
-
-                    "Suplementos" -> SupplementList(
-                        supplements = state.supplements,
-                        onEdit = { supplement -> nc.navigate("suppForm/?id=${supplement.id}") },
-                        onDelete = { supplementToDelete = it }
-                    )
+                    "Suplementos" -> {
+                        SupplementList(
+                            supplements = state.supplements,
+                            onEdit = { supplement -> nc.navigate("suppForm/?id=${supplement.id}") },
+                            onDelete = { supplementToDelete = it }
+                        )
+                    }
                 }
                 exerciseToDelete?.let { exercise ->
                     LDAlertDialog(

@@ -24,7 +24,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import com.liudao.domain.models.Exercise
+import com.liudao.ui.theme.OnPrimary
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreen(
@@ -33,7 +36,20 @@ fun HomeScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     LiuDaoTheme {
         Scaffold(
-            topBar = { TopBar(date = state.today) } ,
+            //topBar = { TopBar(date = state.today) } ,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Inicio",
+                            color = OnPrimary,
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    },
+
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            },
             containerColor = Color.Transparent
         ) { padding ->
             Box(
@@ -92,22 +108,6 @@ fun HomeScreen(
         }
     }
 
-}
-
-@Composable
-fun TopBar(date: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = date,
-            style = MaterialTheme.typography.headlineMedium,
-            color = Color.White
-        )
-    }
 }
 
 @Composable

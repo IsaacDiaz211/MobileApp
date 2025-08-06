@@ -54,7 +54,8 @@ fun SuppFormScreen(
                     title = {
                         Text(
                             if (state?.supplementId == null) "Nuevo suplemento" else "Editar suplemento",
-                            color = Color.White
+                            color = Color.White,
+                            style = MaterialTheme.typography.headlineMedium
                         )
                     },
                     navigationIcon = {
@@ -117,15 +118,22 @@ fun SuppFormScreen(
                     date = state?.endDate,
                     onDateSelected = vm::onEndDateChange
                 )
-                Button(onClick = { Log.d("SuppFormScreen", "Test Button Clicked") }) {
-                    Text("Test Click")
-                }
+
+                Spacer(Modifier.height(20.dp))
 
                 // Periodos existentes
                 if (state?.isEdit == true && state!!.periods.isNotEmpty()) {
-                    Text("Periodos previos:", style = MaterialTheme.typography.titleMedium)
+                    Text("Periodos previos:", style = MaterialTheme.typography.titleLarge)
                     state!!.periods.forEachIndexed { i, period ->
-                        Text("- ${period.start} hasta ${period.end ?: "Actual"}")
+                        Text(
+                            "- ${period.start} hasta ${period.end ?: "Actual"}",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier
+                                .clickable {
+                                    vm.onStartDateChange(period.start)
+                                    vm.onEndDateChange(period.end)
+                                }
+                        )
                     }
                 }
 

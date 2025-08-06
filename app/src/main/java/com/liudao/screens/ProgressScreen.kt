@@ -1,6 +1,5 @@
 package com.liudao.screens
 
-import com.liudao.ui.theme.LiuDaoTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,14 +10,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import com.liudao.ui.theme.OnPrimary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgressScreen() {
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Progreso",
+                        color = OnPrimary,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+    )
+    { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-            Row(
+            /*Row(
                 Modifier
                     .clip(RoundedCornerShape(30.dp))
                     .background(Color.White.copy(alpha = 0.15f))
@@ -34,11 +49,11 @@ fun ProgressScreen() {
                         Text(label, color = Color.White)
                     }
                 }
-            }
+            }*/
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(62.dp))
             // Acá irán los gráficos
             Text("Acá irán los gráficos", color = Color.White)
         }
-
+    }
 }
