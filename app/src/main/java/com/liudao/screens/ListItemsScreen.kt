@@ -80,7 +80,6 @@ fun ListItemsScreen(
             }
         }
     }
-    LiuDaoTheme {
         Scaffold(
             modifier = Modifier.nestedScroll(nestedScrollConnection),
             topBar = {
@@ -214,7 +213,6 @@ fun ListItemsScreen(
                 ) {}
             }
         }
-    }
 }
 
 

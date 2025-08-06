@@ -47,7 +47,6 @@ fun SuppFormScreen(
     vm: SuppFormViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsState()
-    LiuDaoTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -145,8 +144,6 @@ fun SuppFormScreen(
                 }
             }
         }
-    }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -60,6 +60,7 @@ class HomeViewModel @Inject constructor(
         // se guarda internamente para mostrar los inputs
     }
 
+
     fun addSet(exercise: Exercise, weight: Float, reps: Int) {
         _uiState.update { state ->
             state.copy(

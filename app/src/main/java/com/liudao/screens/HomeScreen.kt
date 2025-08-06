@@ -34,80 +34,78 @@ fun HomeScreen(
     vm: HomeViewModel = hiltViewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
-    LiuDaoTheme {
-        Scaffold(
-            //topBar = { TopBar(date = state.today) } ,
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            "Inicio",
-                            color = OnPrimary,
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                    },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Inicio",
+                        color = OnPrimary,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                },
 
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-                )
-            },
-            containerColor = Color.Transparent
-        ) { padding ->
-            Box(
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .fillMaxSize()
+        ){
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
-                    .fillMaxSize()
-            ){
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 80.dp)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    // 2) Lista desplegable de coincidencias
-                    if (state.searchResults.isNotEmpty()) {
-                        ExerciseSuggestions(
-                            list = state.searchResults,
-                            onSelect = { ex ->
-                                vm.selectExercise(ex)
-                                // Mostrar inmediatamente los inputs para ese ejercicio
-                            }
-                        )
-                    }
-
-                    // 3) Sets actuales (agrupados por ejercicio)
-                    SetsList(
-                        sets = state.currentSets,
-                        onAddSameWeight = { idx -> /* igual peso */ },
-                        onAddDifferentWeight = { idx -> /* nuevo peso */ }
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .clip(RoundedCornerShape(40.dp))
-                        .background(Color.Transparent)
-                        .padding(horizontal = 24.dp, vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    // 1) Buscador
-                    SearchRow(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 16.dp)
-                            .padding(horizontal = 16.dp),
-                        text = state.searchText,
-                        onTextChange = vm::onSearchChange,
-                        onAddClick = { /* acción para crear ejercicio */ }
+                    .padding(bottom = 80.dp, start = 16.dp, end = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                var date = state.today
+                Text(
+                    "Rutina del $date",
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                // 2) Lista desplegable de coincidencias
+                if (state.searchResults.isNotEmpty()) {
+                    ExerciseSuggestions(
+                        list = state.searchResults,
+                        onSelect = { ex ->
+                            vm.selectExercise(ex)
+                            // Mostrar inmediatamente los inputs para ese ejercicio
+                        }
                     )
                 }
 
-
+                // 3) Sets actuales (agrupados por ejercicio)
+                SetsList(
+                    sets = state.currentSets,
+                    onAddSameWeight = { idx -> /* igual peso */ },
+                    onAddDifferentWeight = { idx -> /* nuevo peso */ }
+                )
             }
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .clip(RoundedCornerShape(40.dp))
+                    .background(Color.Transparent)
+                    .padding(horizontal = 16.dp, vertical = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                // 1) Buscador
+                SearchRow(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    text = state.searchText,
+                    onTextChange = vm::onSearchChange,
+                    onAddClick = { /* acción para crear ejercicio */ }
+                )
+            }
+
+
         }
     }
-
 }
 
 @Composable
@@ -144,10 +142,18 @@ fun ExerciseSuggestions(
     list: List<Exercise>,
     onSelect: (Exercise) -> Unit
 ) {
-    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-        items(list) { ex ->
-            TextButton(onClick = { onSelect(ex) }) {
-                Text(ex.name)
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        if (list.isEmpty()) {
+            // TODO Mostrar un mensaje si no hay coincidencias
+            // Text("No hay coincidencias.")
+        } else {
+            list.forEach { ex ->
+                TextButton(
+                    onClick = { onSelect(ex) },
+                    modifier = Modifier.fillMaxWidth() // Para que el TextButton ocupe el ancho
+                ) {
+                    Text(ex.name)
+                }
             }
         }
     }

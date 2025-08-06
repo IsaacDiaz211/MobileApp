@@ -57,8 +57,7 @@ fun ExpandableFab(
 
     Column(
         modifier = Modifier
-            .wrapContentSize()
-            .padding(bottom = 16.dp, end = 16.dp),
+            .wrapContentSize(),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -120,16 +119,15 @@ private fun ExtendedFabItem(
             )
             // FAB Circular solo con el Icono
             FloatingActionButton(
-                onClick = onClickExp, // El click se maneja aquí, en el botón
+                onClick = onClickExp,
                 shape = CircleShape,
                 containerColor = Brand,
                 modifier = Modifier
                     .size(50.dp)
-                    //.padding(horizontal = 10.dp)
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = textItem, // El contentDescription puede ser el texto
+                    contentDescription = textItem,
                     tint = OnPrimary
                 )
             }

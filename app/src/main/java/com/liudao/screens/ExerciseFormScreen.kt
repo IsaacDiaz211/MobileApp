@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.graphics.Color
@@ -43,121 +44,119 @@ fun ExerciseFormScreen(
     val state by vm.uiState.collectAsState()
 
     var isDropdownExpanded by rememberSaveable { mutableStateOf(false) }
-    LiuDaoTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            if (state.exerciseId == null) "Nuevo ejercicio" else "Editar ejercicio",
-                            color = Color.White
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { nc.popBackStack() }) {
-                            Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Volver",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        if (state.exerciseId == null) "Nuevo ejercicio" else "Editar ejercicio",
+                        color = Color.White
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { nc.popBackStack() }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        vm.onSave { nc.popBackStack() }
-                    },
-                    shape = CircleShape,
-                ) {
-                    Icon(Icons.Default.Save, contentDescription = "Guardar")
-                }
-            },
-            containerColor = Color.Transparent
-        ) { padding ->
-
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    vm.onSave { nc.popBackStack() }
+                },
+                shape = CircleShape,
+                contentColor = MaterialTheme.colorScheme.primary
             ) {
+                Icon(Icons.Default.Save, contentDescription = "Guardar")
+            }
+        },
+        containerColor = Color.Transparent
+    ) { padding ->
+
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedTextField(
+                value = state.name,
+                onValueChange = vm::onNameChange,
+                label = { Text(
+                    "Nombre del ejercicio",
+                    color = Color.White) },
+                // Estilo para el texto de entrada
+                textStyle = TextStyle(color = Color.White),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // --- EXPOSED DROPDOWN MENU ---
+            ExposedDropdownMenuBox(
+                expanded = isDropdownExpanded,
+                onExpandedChange = { isDropdownExpanded = !isDropdownExpanded }
+            ) {
+                val selectedGroupName = DefaultMuscleGroups
+                    .firstOrNull { it.id == state.selectedGroupId }?.name ?: ""
+
                 OutlinedTextField(
-                    value = state.name,
-                    onValueChange = vm::onNameChange,
+                    readOnly = true,
+                    value = selectedGroupName,
+                    onValueChange = {},
                     label = { Text(
-                        "Nombre del ejercicio",
-                        color = Color.White) },
+                        "Grupo muscular",
+                        color = Color.White
+                    ) },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded)
+                    },
                     // Estilo para el texto de entrada
                     textStyle = TextStyle(color = Color.White),
-                    modifier = Modifier.fillMaxWidth()
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White,
+                        focusedBorderColor = Color.White,
+                        unfocusedBorderColor = Color.LightGray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.Gray,
+
+                        // Colores para el trailing icon (el triangulito)
+                        focusedTrailingIconColor = Color.White,
+                        unfocusedTrailingIconColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor() // ✅ FUNCIONA aunque esté deprecado. Y no funca para nada si no se lo agrega
                 )
 
-                // --- EXPOSED DROPDOWN MENU ---
-                ExposedDropdownMenuBox(
+                ExposedDropdownMenu(
                     expanded = isDropdownExpanded,
-                    onExpandedChange = { isDropdownExpanded = !isDropdownExpanded }
+                    onDismissRequest = { isDropdownExpanded = false }
                 ) {
-                    val selectedGroupName = DefaultMuscleGroups
-                        .firstOrNull { it.id == state.selectedGroupId }?.name ?: ""
-
-                    OutlinedTextField(
-                        readOnly = true,
-                        value = selectedGroupName,
-                        onValueChange = {},
-                        label = { Text(
-                            "Grupo muscular",
-                            color = Color.White
-                        ) },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded)
-                        },
-                        // Estilo para el texto de entrada
-                        textStyle = TextStyle(color = Color.White),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            cursorColor = Color.White,
-                            focusedBorderColor = Color.White,
-                            unfocusedBorderColor = Color.LightGray,
-                            focusedLabelColor = Color.White,
-                            unfocusedLabelColor = Color.Gray,
-
-                            // Colores para el trailing icon (el triangulito)
-                            focusedTrailingIconColor = Color.White,
-                            unfocusedTrailingIconColor = Color.White
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor() // ✅ FUNCIONA aunque esté deprecado. Y no funca para nada si no se lo agrega
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = { isDropdownExpanded = false }
-                    ) {
-                        DefaultMuscleGroups.forEach { group ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        group.name,
-                                        color = Color.Black
-                                    )},
-                                onClick = {
-                                    vm.onGroupSelected(group.id)
-                                    isDropdownExpanded = false
-                                }
-                            )
-                        }
+                    DefaultMuscleGroups.forEach { group ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    group.name,
+                                    color = Color.Black
+                                )},
+                            onClick = {
+                                vm.onGroupSelected(group.id)
+                                isDropdownExpanded = false
+                            }
+                        )
                     }
                 }
             }
         }
     }
-
 }
